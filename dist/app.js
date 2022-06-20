@@ -8171,13 +8171,48 @@ __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap
 __webpack_require__(/*! @fortawesome/fontawesome-free */ "./node_modules/@fortawesome/fontawesome-free/js/fontawesome.js");
 
 
-$('#confirmTeste').on('click', function () {
+$('#submitUser').on('click', function () {
   var userGithub = $('#userGithub').val();
   axios__WEBPACK_IMPORTED_MODULE_0___default().get("https://api.github.com/users/".concat(userGithub)).then(function (response) {
-    $('#photUser').prop('src', response.data.avatar_url);
+    var data = response.data;
+    $('#infos').empty();
+
+    if (data.avatar_url) {
+      $('#infos').append("\n      <figure class=\"rounded-circle\">\n        <img class=\"rounded-circle\" src=\"".concat(data.avatar_url, "\" alt=\"\">\n      </figure>\n      "));
+    }
+
+    if (data.name) {
+      $('#infos').append("<h1>Name: ".concat(data.name, "</h1>"));
+    }
+
+    if (data.company) {
+      $('#infos').append("<h2>".concat(data.company, "</h2>"));
+    }
+
+    if (data.id) {
+      $('#infos').append("<h2>ID: ".concat(data.id, "</h2>"));
+    }
+
+    if (data.bio) {
+      $('#infos').append("<h2>BIO: ".concat(data.bio, "</h2>"));
+    }
+
+    if (data.created_at) {
+      var created = new Date(data.created_at),
+          dayCreated = created.getDate(),
+          monthCreated = created.getMonth() + 1,
+          yearCreated = created.getFullYear();
+
+      if (monthCreated.toString().length < 2) {
+        monthCreated = '0' + monthCreated;
+      }
+
+      $('#infos').append("<h2>CREATED AT: ".concat(dayCreated + '/' + monthCreated + '/' + yearCreated, "</h2>"));
+    }
   })["catch"](function (e) {
     console.log(e.message);
-    $('#infos').append("<h1>Usuario nao encontrado</h1>");
+    $('#infos').empty();
+    $('#infos').append("<h1>User not found</h1>");
   });
 });
 
